@@ -1,13 +1,12 @@
 # playframework-practice
 playframework練習用
 
+# Requirement
+
+sbt 1.6.2
+openjdk 8
+
 # Usage
-```
-brew install sbt
-```
-```
-brew install openjdk@8
-```
 ```
 sbt run
 ```
