@@ -1,0 +1,17 @@
+@(form: Form[MemberForm], data: Seq[Member])(implicit request: MessagesRequestHeader)
+
+@main("Add Member") {
+  @helper.form(action=routes.MemberController.create()) {
+    @helper.CSRF.formField
+    @helper.inputText(form("name"))
+    @helper.inputText(form("mail"))
+    @helper.inputPassword(form("password"))
+    <input type="submit" value="追加"/>
+  }
+  <hr>
+  <ul>
+    @for(member<-data){
+      <li>@member.id: @member.name (MAIL: @member.mail, PASS: @member.password)</li>
+    }
+  </ul>
+}

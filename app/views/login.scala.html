@@ -1,0 +1,10 @@
+@(form: Form[MemberLogin])(implicit request: MessagesRequestHeader)
+
+@main("Login") {
+  @helper.form(action=routes.MyPageController.login()) {
+    @helper.CSRF.formField
+    @helper.inputText(form("mail"))
+    @helper.inputPassword(form("password"))
+    <input type="submit" value="login"/>
+  }
+}
