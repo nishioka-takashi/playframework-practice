@@ -1,0 +1,26 @@
+@(apiForm: Form[ApiForm], result: String = "")(implicit request: MessagesRequestHeader)
+
+@main("call api") {
+  <h1>今日の天気(関東甲信越)</h1>
+  @helper.form(action=routes.ApiController.call()) {
+    @helper.CSRF.formField
+    @helper.select(
+      field = apiForm("area"),
+      options = Seq(
+        "080000" -> "茨城",
+        "090000" -> "栃木",
+        "100000" -> "群馬",
+        "110000" -> "埼玉",
+        "120000" -> "千葉",
+        "130000" -> "東京",
+        "140000" -> "神奈川",
+        "190000" -> "山梨",
+        "200000" -> "長野"
+       ),
+      Symbol("_default") -> "地域を選択してください",
+      Symbol("_label") -> "地域",
+    )
+    <input type="submit" value="表示"/>
+  }
+  <span>@result</span>
+}
