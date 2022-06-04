@@ -21,10 +21,14 @@ class MyPageController @Inject()(
     def index() = Action.async { implicit request =>
       val mail = request.session.get("mail")
       val pass = request.session.get("password")
+
       (mail, pass) match {
         case (Some(x), Some(y)) => 
           repository.authenticate(x, y).map { member =>
-            Ok(views.html.mypage(member))
+            member match {
+              case Some(m: Member) => Ok(views.html.mypage(m))
+              case _ => Ok(views.html.login(Member.memberLogin))
+            }
           }
         case _ => Future{Ok(views.html.login(Member.memberLogin))}
       }
@@ -37,12 +41,20 @@ class MyPageController @Inject()(
         },
         member => {
           repository.authenticate(member.mail, member.password).map { member =>
-            Ok(views.html.mypage(member)).withSession(
-              "mail" -> member.mail,
-              "password" -> member.password
-            )
+            member match {
+              case Some(m: Member) =>
+                Ok(views.html.mypage(m)).withSession(
+                  "mail" -> m.mail,
+                  "password" -> m.password
+                )
+              case _ => Ok(views.html.login(Member.memberLogin))
+            }
           }
         }
       )
+    }
+
+    def logout() = Action { implicit request =>
+      Ok(views.html.login(Member.memberLogin)).withNewSession
     }
   }

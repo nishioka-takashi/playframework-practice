@@ -2,7 +2,8 @@ package controllers
 
 import javax.inject._
 
-import models._
+import forms._
+import utils._
 import play.api._
 import play.api.mvc._
 import play.api.data.Form
@@ -15,7 +16,7 @@ class ApiController @Inject()(cc: MessagesControllerComponents)
 
   val apiForm = Form(
     mapping(
-      "area" -> text
+      "area" -> nonEmptyText
     )(ApiForm.apply)(ApiForm.unapply)
   )
 
@@ -29,38 +30,17 @@ class ApiController @Inject()(cc: MessagesControllerComponents)
     val form = apiForm.bindFromRequest
     form.fold(
       errorForm => {
-        BadRequest(views.html.api(errorForm, "不正な入力です"))
+        BadRequest(views.html.api(errorForm))
       },
       area => {
         val r = requests.get("https://www.jma.go.jp/bosai/forecast/data/overview_forecast/" + area.area + ".json")
         val json: JsValue = Json.parse(r.text)
-        val publishingOffice = (json \ "publishingOffice").asOpt[String]
-        val reportDatetime = (json \ "reportDatetime").asOpt[String]
-        val targetArea = (json \ "targetArea").asOpt[String]
-        val text = (json \ "text").asOpt[String]
-        val table = s"""
-          <table>
-            <tbody>
-                <tr>
-                    <td>publishingOffice</td>
-                    <td>$publishingOffice</td>
-                </tr>
-                <tr>
-                    <td>reportDatetime</td>
-                    <td>$reportDatetime</td>
-                </tr>
-                <tr>
-                    <td>targetArea</td>
-                    <td>$targetArea</td>
-                </tr>
-                <tr>
-                    <td>text</td>
-                    <td>$text</td>
-                </tr>
-            </tbody>
-          </table>
-        """
-        Ok(views.html.api(form, table))
+        val weatherResult: JsResult[Weather] = json.validate[Weather]
+        println(weatherResult)
+        weatherResult match {
+          case s: JsSuccess[Weather] => Ok(views.html.api(form, s.get))
+          case e: JsError => Ok(views.html.api(form))
+        }
       }
     )
   }

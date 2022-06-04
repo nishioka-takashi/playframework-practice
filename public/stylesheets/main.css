@@ -88,3 +88,7 @@ dd.info {
 dd.error {
   color: red;
 }
+
+table td {
+  border: 1px solid black;
+}

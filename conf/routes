@@ -9,6 +9,7 @@ GET /members controllers.MemberController.index()
 POST /members controllers.MemberController.create()
 GET /login controllers.MyPageController.index()
 POST /login controllers.MyPageController.login()
+GET /logout controllers.MyPageController.logout()
 GET /api controllers.ApiController.index()
 POST /api controllers.ApiController.call()
 

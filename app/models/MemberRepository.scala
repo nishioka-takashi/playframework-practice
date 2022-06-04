@@ -37,7 +37,7 @@ class MemberRepository @Inject()
         members += Member(0, name, mail, password)
       }
     
-    def authenticate(email: String, password: String): Future[Member] = db.run {
-      members.filter(m => (m.mail === email) && (m.password === password)).result.head
+    def authenticate(email: String, password: String): Future[Option[Member]] = db.run {
+      members.filter(m => (m.mail === email) && (m.password === password)).result.headOption
     }
   }

@@ -1,4 +1,7 @@
-@(apiForm: Form[ApiForm], result: String = "")(implicit request: MessagesRequestHeader)
+@(
+  apiForm: Form[forms.ApiForm],
+  weather: utils.Weather = utils.Weather("", "", "", "")
+)(implicit request: MessagesRequestHeader)
 
 @main("call api") {
   <h1>今日の天気(関東甲信越)</h1>
@@ -22,5 +25,24 @@
     )
     <input type="submit" value="表示"/>
   }
-  <span>@result</span>
+  <table>
+    <tbody>
+        <tr>
+            <td>publishingOffice</td>
+            <td>@weather.publishingOffice</td>
+        </tr>
+        <tr>
+            <td>reportDatetime</td>
+            <td>@weather.reportDatetime</td>
+        </tr>
+        <tr>
+            <td>targetArea</td>
+            <td>@weather.targetArea</td>
+        </tr>
+        <tr>
+            <td>text</td>
+            <td>@weather.text</td>
+        </tr>
+    </tbody>
+  </table>
 }
