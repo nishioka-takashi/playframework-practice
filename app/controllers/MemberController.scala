@@ -39,7 +39,7 @@ class MemberController @Inject()(
         },
         member => {
           repository.create(member.name, member.mail, member.password).map { _ =>
-            Redirect(routes.MemberController.index)
+            Redirect(routes.MemberController.index).flashing("success" -> "member created!")
           }
         }
       )

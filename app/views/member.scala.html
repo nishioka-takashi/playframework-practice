@@ -1,6 +1,7 @@
-@(form: Form[MemberForm], data: Seq[Member])(implicit request: MessagesRequestHeader)
+@(form: Form[MemberForm], data: Seq[Member])(implicit request: MessagesRequestHeader, flash: Flash)
 
 @main("Add Member") {
+  <p>@flash.get("success").getOrElse("add member")</p>
   @helper.form(action=routes.MemberController.create()) {
     @helper.CSRF.formField
     @helper.inputText(form("name"))
